@@ -1,0 +1,22 @@
+html 
+    head
+        title Tic Tac Toe
+        link(rel='stylesheet', href='./style.css')
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    body
+     - const numOfFields = 9;
+    - const IDs = Array.from({ length: numOfFields }, (_, index) => index + 1);
+
+    div.tic-tac-toe_wrapper
+        form.tic-tac-toe_board
+            each id in IDs
+                input(type='checkbox' id=`cell-${id}-player-1`).hide.xplayer
+                input(type='checkbox' id=`cell-${id}-player-2`).hide.oplayer
+            each id in IDs        
+                    div(id=`field-${id}`).field
+            each id in IDs
+                label(for=`cell-${id}-player-1` id=`turn-x-${id}`).sign.player-x         
+                label(for=`cell-${id}-player-2` id=`turn-o-${id}`).sign.player-o 
+            div.winner 
+            button(type='reset').reset Restart
+                    

@@ -1,0 +1,464 @@
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+:root {
+  --player: "Player X starts the game.";
+  --container-width: 60vmin;
+  --bodyBg: #001c24;
+  --gap: 2vmin;
+  --signX: "✖";
+  --signO: "〇";
+  --oColor: #ff5733;
+  --xColor: #3ebcb3;
+  --b-radius: 8px;
+  --box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  --field-color: #003747;
+}
+
+body {
+  background: var(--bodyBg);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.tic-tac-toe_wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.tic-tac-toe_board {
+  width: var(--container-width);
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  position: relative;
+  gap: var(--gap);
+}
+
+.hide {
+  position: absolute;
+  transform: translate(-9999px);
+}
+
+.field {
+  width: calc(var(--container-width) / 3 - 2vmin);
+  aspect-ratio: 1;
+  background: var(--field-color);
+  position: relative;
+  border-radius: var(--b-radius);
+  box-shadow: var(--box-shadow);
+  container-type: inline-size;
+}
+.field:after {
+  content: var(--symbol);
+  position: absolute;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 50cqw;
+}
+
+.sign {
+  width: calc(var(--container-width) / 3 - 2vmin);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border-radius: var(--b-radius);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.2s;
+  container-type: inline-size;
+}
+.sign:hover {
+  cursor: pointer;
+  opacity: 1;
+}
+.sign::after {
+  color: var(--bodyBg);
+  border-radius: var(--gap);
+  line-height: 0vmin;
+  font-weight: bold;
+  font-size: 50cqw;
+}
+
+.player-x {
+  visibility: visible;
+}
+
+.player-o {
+  visibility: hidden;
+}
+
+.player-x:hover:after {
+  content: var(--signX);
+}
+
+.player-o:hover:after {
+  content: var(--signO);
+}
+
+.winner {
+  position: absolute;
+  transform: translate(0, 65vmin);
+  color: white;
+  width: 100%;
+  border: 1px solid black;
+  padding: 0.5vmin;
+  height: 5vmin;
+  border-radius: 1vmin;
+  background: var(--field-color);
+}
+.winner::after {
+  content: var(--player);
+  position: absolute;
+  transform: translate(1vmin, 0.7vmin);
+  text-transform: uppercase;
+  font-size: 3vmin;
+}
+
+.reset {
+  all: unset;
+  position: absolute;
+  transform: translate(15vmin, 75vmin);
+  width: 50%;
+  aspect-ratio: 0;
+  padding: 1vmin 0.5vmin;
+  border-radius: 1vmin;
+  background: var(--field-color);
+  color: yellow;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.reset:hover {
+  cursor: pointer;
+}
+
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked), .tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked), .tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked), .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked), .tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked), .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked), .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked), .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) {
+  --player: "Player X won!!!";
+}
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) .player-o, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) .field,
+.tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) .player-x,
+.tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) .player-o {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) #field-2, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-2-player-1:checked ~ #cell-3-player-1:checked) #field-3, .tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) #field-4, .tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) #field-5, .tic-tac-toe_board:has(#cell-4-player-1:checked ~ #cell-5-player-1:checked ~ #cell-6-player-1:checked) #field-6, .tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) #field-7, .tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) #field-8, .tic-tac-toe_board:has(#cell-7-player-1:checked ~ #cell-8-player-1:checked ~ #cell-9-player-1:checked) #field-9, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) #field-4, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-4-player-1:checked ~ #cell-7-player-1:checked) #field-7, .tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) #field-2, .tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) #field-5, .tic-tac-toe_board:has(#cell-2-player-1:checked ~ #cell-5-player-1:checked ~ #cell-8-player-1:checked) #field-8, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) #field-3, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) #field-6, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-6-player-1:checked ~ #cell-9-player-1:checked) #field-9, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) #field-5, .tic-tac-toe_board:has(#cell-1-player-1:checked ~ #cell-5-player-1:checked ~ #cell-9-player-1:checked) #field-9, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) #field-3, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) #field-5, .tic-tac-toe_board:has(#cell-3-player-1:checked ~ #cell-5-player-1:checked ~ #cell-7-player-1:checked) #field-7 {
+  outline: 0.5vmin solid var(--xColor) !important;
+  opacity: 1 !important;
+}
+
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked), .tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked), .tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked), .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked), .tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked), .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked), .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked), .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) {
+  --player: "Player O won!!!";
+}
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) .player-o, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) .field,
+.tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) .player-x,
+.tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) .player-o {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) #field-2, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-2-player-2:checked ~ #cell-3-player-2:checked) #field-3, .tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) #field-4, .tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) #field-5, .tic-tac-toe_board:has(#cell-4-player-2:checked ~ #cell-5-player-2:checked ~ #cell-6-player-2:checked) #field-6, .tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) #field-7, .tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) #field-8, .tic-tac-toe_board:has(#cell-7-player-2:checked ~ #cell-8-player-2:checked ~ #cell-9-player-2:checked) #field-9, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) #field-4, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-4-player-2:checked ~ #cell-7-player-2:checked) #field-7, .tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) #field-2, .tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) #field-5, .tic-tac-toe_board:has(#cell-2-player-2:checked ~ #cell-5-player-2:checked ~ #cell-8-player-2:checked) #field-8, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) #field-3, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) #field-6, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-6-player-2:checked ~ #cell-9-player-2:checked) #field-9, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) #field-1, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) #field-5, .tic-tac-toe_board:has(#cell-1-player-2:checked ~ #cell-5-player-2:checked ~ #cell-9-player-2:checked) #field-9, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) #field-3, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) #field-5, .tic-tac-toe_board:has(#cell-3-player-2:checked ~ #cell-5-player-2:checked ~ #cell-7-player-2:checked) #field-7 {
+  outline: 0.5vmin solid var(--oColor) !important;
+  opacity: 1 !important;
+}
+
+#turn-x-1,
+#turn-o-1 {
+  transform: translate(0vmin, 0vmin);
+}
+
+#cell-1-player-1:checked ~ #field-1::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-1-player-2:checked ~ #field-1::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-2,
+#turn-o-2 {
+  transform: translate(21vmin, 0vmin);
+}
+
+#cell-2-player-1:checked ~ #field-2::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-2-player-2:checked ~ #field-2::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-3,
+#turn-o-3 {
+  transform: translate(42vmin, 0vmin);
+}
+
+#cell-3-player-1:checked ~ #field-3::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-3-player-2:checked ~ #field-3::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-4,
+#turn-o-4 {
+  transform: translate(0vmin, 21vmin);
+}
+
+#cell-4-player-1:checked ~ #field-4::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-4-player-2:checked ~ #field-4::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-5,
+#turn-o-5 {
+  transform: translate(21vmin, 21vmin);
+}
+
+#cell-5-player-1:checked ~ #field-5::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-5-player-2:checked ~ #field-5::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-6,
+#turn-o-6 {
+  transform: translate(42vmin, 21vmin);
+}
+
+#cell-6-player-1:checked ~ #field-6::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-6-player-2:checked ~ #field-6::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-7,
+#turn-o-7 {
+  transform: translate(0vmin, 42vmin);
+}
+
+#cell-7-player-1:checked ~ #field-7::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-7-player-2:checked ~ #field-7::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-8,
+#turn-o-8 {
+  transform: translate(21vmin, 42vmin);
+}
+
+#cell-8-player-1:checked ~ #field-8::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-8-player-2:checked ~ #field-8::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+#turn-x-9,
+#turn-o-9 {
+  transform: translate(42vmin, 42vmin);
+}
+
+#cell-9-player-1:checked ~ #field-9::after {
+  content: var(--signX);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--xColor);
+}
+
+#cell-9-player-2:checked ~ #field-9::after {
+  content: var(--signO);
+  z-index: 11;
+  border-radius: var(--b-radius);
+  font-size: 50cqw;
+  line-height: 0vmin;
+  font-weight: bold;
+  color: var(--oColor);
+}
+
+input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x {
+  visibility: visible;
+}
+
+input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-x {
+  visibility: hidden;
+}
+
+input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o {
+  visibility: visible;
+}
+
+input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o, input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ .player-o {
+  visibility: hidden;
+}
+
+.tic-tac-toe_board:has(input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked) {
+  --player: "Player O plays next";
+}
+
+.tic-tac-toe_board:has(input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked), .tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked) {
+  --player: "Player X plays next";
+}
+
+.tic-tac-toe_board:has(input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked) {
+  --player: "It's a draw.";
+}
+
+/*# sourceMappingURL=style.css.map */

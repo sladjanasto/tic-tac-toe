@@ -1,0 +1,399 @@
+@use "sass:map";
+@use "sass:list";
+@use "sass:string";
+@use "sass:math";
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+:root {
+  --player: "Player X starts the game.";
+  --container-width: 60vmin;
+  --bodyBg: #001c24;
+  --gap: 2vmin;
+  --signX: "\2716";
+  --signO: "〇";
+  --oColor: #ff5733;
+  --xColor: #3ebcb3;
+  --b-radius: 8px;
+  --box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  --field-color: #003747;
+}
+$num-of-fields: 9;
+$width: 60;
+$row: sqrt($num-of-fields);
+$cell-size: calc($width / $row) - 2;
+
+@debug "This is the row : " $row;
+@function generate-grid($cols, $rows) {
+  $map: ();
+  $index: 1;
+  $gap: (($width - $row * $cell-size) / ($row - 1));
+  @for $y from 0 through ($rows - 1) {
+    @for $x from 0 through ($cols - 1) {
+      $coord-x: ($x * ($cell-size + $gap));
+      $coord-y: ($y * ($cell-size + $gap));
+
+      $map: map.merge(
+        $map,
+        (
+          $index: (
+            $coord-x,
+            $coord-y,
+          ),
+        )
+      );
+      $index: $index + 1;
+    }
+  }
+  @return $map;
+}
+@debug sqrt($num-of-fields);
+
+$grid-map: generate-grid($row, $row);
+
+@function add-units($values) {
+  $value1: list.nth($values, 1);
+  $value2: list.nth($values, -1);
+  $values_units: #{$value1}vmin, #{$value2}vmin;
+  @return $values_units;
+}
+@mixin labels-position() {
+  @for $i from 1 through $num-of-fields {
+    @if map.has-key($grid-map, $i) {
+      $field: map.get($grid-map, $i);
+      #turn-x-#{$i},
+      #turn-o-#{$i} {
+        transform: translate(add-units($field));
+      }
+      #cell-#{$i}-player-1:checked {
+        @include set-symbol($i, "x", 50cqw, var(--xColor));
+      }
+      #cell-#{$i}-player-2:checked {
+        @include set-symbol($i, "o", 50cqw, var(--oColor));
+      }
+    }
+  }
+}
+@mixin set-symbol($i, $symbol, $size, $color) {
+  & ~ #field-#{$i}::after {
+    content: if($symbol == "x", var(--signX), var(--signO));
+    z-index: 11;
+    border-radius: var(--b-radius);
+    font-size: $size;
+    line-height: 0vmin;
+    font-weight: bold;
+    color: $color;
+  }
+}
+@mixin turn-visibility($max-turns: $num-of-fields) {
+  $x-visible: ();
+  $x-hidden: ();
+  $o-visible: ();
+  $o-hidden: ();
+  $chain: "";
+  @for $i from 1 through $max-turns {
+    @if $i == 1 {
+      $chain: "input:checked";
+    } @else {
+      $chain: "#{$chain} ~ input:checked";
+    }
+    $x-sel: "#{$chain} ~ .player-x";
+    $o-sel: "#{$chain} ~ .player-o";
+    @if $i % 2 == 0 {
+      $x-visible: list.append($x-visible, $x-sel, comma);
+      $o-hidden: list.append($o-hidden, $o-sel, comma);
+    } @else {
+      $x-hidden: list.append($x-hidden, $x-sel, comma);
+      $o-visible: list.append($o-visible, $o-sel, comma);
+    }
+  }
+  #{$x-visible} {
+    visibility: visible;
+  }
+  #{$x-hidden} {
+    visibility: hidden;
+  }
+  #{$o-visible} {
+    visibility: visible;
+  }
+  #{$o-hidden} {
+    visibility: hidden;
+  }
+}
+
+@mixin turn-system($max-turns: $num-of-fields) {
+  $player-x: ();
+  $player-o: ();
+  $player-o: list.append(
+    $player-o,
+    ".tic-tac-toe_board:has(input:checked)",
+    comma
+  );
+  $chain: "input:checked";
+  $draw-turns: $num-of-fields;
+
+  @for $turn from 2 through $max-turns {
+    $chain: "#{$chain} ~ input:checked";
+    $selector: ".tic-tac-toe_board:has(#{$chain})";
+
+    @if ($turn % 2 == 0) {
+      $player-x: list.append($player-x, $selector, comma);
+    } @else {
+      $player-o: list.append($player-o, $selector, comma);
+    }
+  }
+
+  #{$player-o} {
+    --player: "Player O plays next";
+  }
+  #{$player-x} {
+    --player: "Player X plays next";
+  }
+  $allCels: ();
+  $input: "input:checked ~";
+  @for $i from 2 through $max-turns {
+    $allCels: list.append($allCels, $input, space);
+    @if $i == $max-turns {
+      $allCels: list.append($allCels, string.slice($input, 1, -3), space);
+    }
+  }
+  .tic-tac-toe_board:has(#{$allCels}) {
+    --player: "It's a draw.";
+  }
+}
+
+@function generate-winning-combinations($size) {
+  $map: ();
+  @for $row from 0 to $size {
+    $combo: ();
+    @for $col from 1 through $size {
+      $index: $row * $size + $col;
+      $combo: list.append($combo, $index);
+    }
+    $map: map.merge(
+      $map,
+      (
+        "row-#{$row + 1}": $combo,
+      )
+    );
+  }
+  @for $col from 1 through $size {
+    $combo: ();
+    @for $row from 0 to $size {
+      $index: $col + $row * $size;
+      $combo: list.append($combo, $index);
+    }
+    $map: map.merge(
+      $map,
+      (
+        "col-#{$col}": $combo,
+      )
+    );
+  }
+  $diag1: ();
+  @for $i from 0 to $size {
+    $index: 1 + $i * ($size + 1);
+    $diag1: list.append($diag1, $index);
+  }
+  $map: map.merge(
+    $map,
+    (
+      "diag-1": $diag1,
+    )
+  );
+  $diag2: ();
+  @for $i from 1 through $size {
+    $index: $i * ($size) - ($i - 1);
+    $diag2: list.append($diag2, $index);
+  }
+  $map: map.merge(
+    $map,
+    (
+      "diag-2": $diag2,
+    )
+  );
+
+  @return $map;
+}
+$winning-combinations: generate-winning-combinations($row);
+@mixin winning-positions($winning-combinations) {
+  $x-wins: ();
+  $o-wins: ();
+  $x-win-cells: ();
+  $o-win-cells: ();
+
+  @each $name, $combination in $winning-combinations {
+    $x-line: ".tic-tac-toe_board:has(";
+    $o-line: ".tic-tac-toe_board:has(";
+    $x-fields: ();
+    $o-fields: ();
+
+    @each $cell in $combination {
+      $x-line: "#{$x-line}#cell-#{$cell}-player-1:checked ~ ";
+      $o-line: "#{$o-line}#cell-#{$cell}-player-2:checked ~ ";
+
+      $x-fields: list.append($x-fields, "#field-#{$cell}", comma);
+      $o-fields: list.append($o-fields, "#field-#{$cell}", comma);
+    }
+    $x-line: string.slice($x-line, 1, string.length($x-line) - 2) + ")";
+    $o-line: string.slice($o-line, 1, string.length($o-line) - 2) + ")";
+    $x-wins: list.append($x-wins, $x-line, comma);
+    $o-wins: list.append($o-wins, $o-line, comma);
+    @each $field in $x-fields {
+      $x-win-cells: list.append($x-win-cells, "#{$x-line} #{$field}", comma);
+    }
+
+    @each $field in $o-fields {
+      $o-win-cells: list.append($o-win-cells, "#{$o-line} #{$field}", comma);
+    }
+  }
+  #{$x-wins} {
+    --player: "Player X won!!!";
+    .field,
+    .player-x,
+    .player-o {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  #{$x-win-cells} {
+    outline: 0.5vmin solid var(--xColor) !important;
+    opacity: 1 !important;
+  }
+  #{$o-wins} {
+    --player: "Player O won!!!";
+    .field,
+    .player-x,
+    .player-o {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  #{$o-win-cells} {
+    outline: 0.5vmin solid var(--oColor) !important;
+    opacity: 1 !important;
+  }
+}
+@mixin grid-template($count) {
+  grid-template-columns: repeat($count, 1fr);
+}
+@mixin flex-center($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+@mixin size($width, $aspect) {
+  width: $width;
+  aspect-ratio: $aspect;
+}
+@mixin position($position, $top, $left) {
+  position: $position;
+  transform: translate($left, $top);
+}
+body {
+  background: var(--bodyBg);
+  @include flex-center(row, center, center);
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+.tic-tac-toe_wrapper {
+  @include flex-center(row, center, center);
+  width: 100%;
+}
+
+.tic-tac-toe_board {
+  @include size(var(--container-width), 1);
+  display: grid;
+  @include grid-template($row);
+  position: relative;
+  gap: var(--gap);
+}
+.hide {
+  position: absolute;
+  transform: translate(-9999px);
+}
+.field {
+  @include size(calc(var(--container-width) / $row - 2vmin), 1);
+  background: var(--field-color);
+  position: relative;
+  border-radius: var(--b-radius);
+  box-shadow: var(--box-shadow);
+  container-type: inline-size;
+  &:after {
+    content: var(--symbol);
+    position: absolute;
+    @include size(100%, 1);
+    @include flex-center(row, center, center);
+    font-size: 50cqw;
+  }
+}
+.sign {
+  @include size(calc(var(--container-width) / $row - 2vmin), 1);
+  @include flex-center(row, center, center);
+  position: absolute;
+  border-radius: var(--b-radius);
+  opacity: 0;
+  transition: opacity 0.5s ease 0.2s;
+  container-type: inline-size;
+  &:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+  &::after {
+    color: var(--bodyBg);
+    border-radius: var(--gap);
+    line-height: 0vmin;
+    font-weight: bold;
+    font-size: 50cqw;
+  }
+}
+.player-x {
+  visibility: visible;
+}
+.player-o {
+  visibility: hidden;
+}
+.player-x:hover:after {
+  content: var(--signX);
+}
+.player-o:hover:after {
+  content: var(--signO);
+}
+.winner {
+  @include position(absolute, 65vmin, 0);
+  color: white;
+  width: 100%;
+  border: 1px solid black;
+  padding: 0.5vmin;
+  height: 5vmin;
+  border-radius: 1vmin;
+  background: var(--field-color);
+  &::after {
+    content: var(--player);
+    @include position(absolute, 0.7vmin, 1vmin);
+    text-transform: uppercase;
+    font-size: 3vmin;
+  }
+}
+.reset {
+  all: unset;
+  @include position(absolute, 75vmin, 15vmin);
+  @include size(50%, 0);
+  padding: 1vmin 0.5vmin;
+  border-radius: 1vmin;
+  background: var(--field-color);
+  color: yellow;
+  @include flex-center(row, center, center);
+  &:hover {
+    cursor: pointer;
+  }
+}
+@include winning-positions($winning-combinations);
+@include labels-position();
+@include turn-visibility($num-of-fields);
+@include turn-system($num-of-fields);
