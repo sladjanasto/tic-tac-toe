@@ -1,4 +1,4 @@
-# 🎓 Build a Pure CSS Tic-Tac-Toe Game: A Step-by-Step SCSS Tutorial
+# Build a Pure CSS Tic-Tac-Toe Game: A Step-by-Step SCSS Tutorial
 
 Welcome to a deep dive into building a **fully functional Tic-Tac-Toe game using only CSS and SCSS** — no JavaScript involved. This tutorial guides you through every step of the process, with in-depth comments explaining how and why each piece works.
 
@@ -6,7 +6,7 @@ Whether you want to improve your SCSS skills, experiment with advanced selectors
 
 ---
 
-## 🔧 The Setup: What We’ll Build
+## The Setup: What We’ll Build
 
 - A scalable Tic-Tac-Toe board (3x3 by default, easily adjustable)
 - Two-player interactivity using `:checked` states
@@ -16,7 +16,7 @@ Whether you want to improve your SCSS skills, experiment with advanced selectors
 
 ---
 
-## 1. 🧱 Grid Generation Using SCSS
+## 1. Grid Generation Using SCSS
 
 ```scss
 $num-of-fields: 9;
@@ -52,13 +52,13 @@ $cell-size: calc($width / math.sqrt($num-of-fields)) - 2;
 $grid-map: generate-grid(sqrt($num-of-fields), sqrt($num-of-fields));
 ```
 
-### 🧠 Explanation
+### Explanation
 
 This function dynamically calculates the `(x, y)` coordinates for each field based on its grid position. These coordinates will later be used to absolutely position the game elements like labels and fields.
 
 ---
 
-## 2. 🏆 Winning Logic
+## 2. Winning Logic
 
 ```scss
 @function generate-winning-combinations($size) {
@@ -122,13 +122,13 @@ This function dynamically calculates the `(x, y)` coordinates for each field bas
 $winning-combinations: generate-winning-combinations(sqrt($num-of-fields));
 ```
 
-### 🧠 Explanation
+### Explanation
 
 This function builds a map of all possible winning lineups on the grid: horizontal rows, vertical columns, and the two diagonals. Each combination is a list of cell indices. These will be used to detect and style the winning states later.
 
 ---
 
-## 3. 🎯 Turn System with CSS Variables
+## 3. Turn System with CSS Variables
 
 ```scss
 @mixin turn-system($max-turns: $num-of-fields) {
@@ -173,13 +173,13 @@ This function builds a map of all possible winning lineups on the grid: horizont
 }
 ```
 
-### 🧠 Explanation
+### Explanation
 
 Using chained `input:checked` selectors, this mixin determines the turn order. It sets a CSS variable `--player` that updates the UI to show who plays next, or whether the game is a draw when all checkboxes are selected.
 
 ---
 
-## 4. 🧼 Dynamic Styling with Mixins
+## 4. Dynamic Styling with Mixins
 
 ```scss
 @mixin flex-center($direction: row, $justify: center, $align: center) {
@@ -204,13 +204,13 @@ Using chained `input:checked` selectors, this mixin determines the turn order. I
 }
 ```
 
-### 🧠 Explanation
+### Explanation
 
 We use reusable mixins to keep our code DRY. `flex-center` handles alignment, `size` keeps aspect ratios consistent, and `set-symbol` dynamically injects player symbols based on state.
 
 ---
 
-## 5. 🧪 Full Game Demo
+## 5. Full Game Demo
 
 Check out the full demo and play the game: 👉 [Live Demo on CodePen](#)
 
@@ -218,7 +218,7 @@ Feel free to modify the board size, colors, or layout!
 
 ---
 
-## ✅ Conclusion
+## Conclusion
 
 This tutorial shows how powerful CSS and SCSS can be when you approach styling as logic. With the help of `:checked`, `:has()`, maps, and mixins, you can simulate real state-driven behavior entirely within your stylesheet.
 

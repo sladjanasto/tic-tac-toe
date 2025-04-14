@@ -43,5 +43,5 @@ You can read the full article with code breakdown here:
 ├── style.scss
 ├── style.css
 ├── readme.md
-└── screenshot.png
+└── codepan_tictactoe.png
 ```
