@@ -12,11 +12,11 @@ A fully functional, interactive Tic-Tac-Toe game built entirely in **SCSS and HT
 
 ## 📸 Preview
 
-![Game preview screenshot](./screenshot.png)
+![Game preview screenshot](./codepan_tictactoe.png)
 
 ## 🔗 Live Demo
 
-👉 [Play on CodePen](#)
+👉 [Play on CodePen](https://codepen.io/smirosljevic/pen/WbNJYey)
 
 ## 🛠 How It Works (Quick Overview)
 
